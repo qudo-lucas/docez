@@ -9,14 +9,16 @@ module.exports = (tree) => {
 
         const [ name ] = fullName.split("#").reverse();
         const [ id ] = file.split("#").reverse();
-        
+
+        console.log({ path });
+
         if(!isRoot) {
             // Start content section
             contentHtml.push(`
                 <div
                     class="${isRoot ? "content-wrapper" : "section"}"
                     data-level="${level}"
-                    id="${path}/${id}"
+                    id="${path ? `${path}/` : ""}${id}"
                 >
                 ${html}
             `);
