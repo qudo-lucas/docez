@@ -32,13 +32,6 @@ const validate = (input, output) => {
         return false;
     }
 
-    if(!fs.existsSync(`${process.cwd()}/${output}`)) {
-        error(`Output directory "${output}" does not exist.`);
-        link();
-
-        return false;
-    }
-
     if(!fs.existsSync(`${process.cwd()}/${input}/sections`)) {
         error(`${input}/sections does not exist.`);
         link();
@@ -60,6 +53,9 @@ module.exports = (input, output) => {
     if(!validate(input, output)) {
         return;
     }
+
+    // Ensure output dir
+    fs.ensureDirSync(`${process.cwd()}/${output}`);
     
     // Recursively build a tree similar to the provided directory.
     // This tree will contain the rendered html for each .md file.
