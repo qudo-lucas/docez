@@ -10,13 +10,11 @@ module.exports = (tree) => {
         const [ name ] = fullName.split("#").reverse();
         const [ id ] = file.split("#").reverse();
 
-        console.log({ path });
-
         if(!isRoot) {
             // Start content section
             contentHtml.push(`
                 <div
-                    class="${isRoot ? "content-wrapper" : "section"}"
+                    class="${isRoot ? "docez-content-wrapper" : "docez-content-section"}"
                     data-level="${level}"
                     id="${path ? `${path}/` : ""}${id}"
                 >
@@ -26,7 +24,7 @@ module.exports = (tree) => {
             // Start nav group
             navHtml.push(`
                 <div
-                    class="nav-group"
+                    class="docez-nav-group"
                     data-level="${level}"
                 >
                     <a href="#${path ? `${path}/` : ""}${id}">${name}</a>

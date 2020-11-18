@@ -2,14 +2,8 @@ const fs = require("fs-extra");
 const md = require("markdown-it")();
 const glob = require("glob");
 
-module.exports = (directory = false) => {
-    if(!directory || !fs.existsSync(`${process.cwd()}/${directory}`)) {
-        console.log("[Markdown HTML Docks] Please provide a directory relative to your working directory.");
-        
-        return;
-    }
-
-    const fullPath = `${process.cwd()}/${directory}`;
+module.exports = ({ markdown }) => {
+    const fullPath = `${process.cwd()}/${markdown}`;
     const files = glob.sync(`${fullPath}/**/*.md`);
 
     const tree = {
@@ -49,6 +43,7 @@ module.exports = (directory = false) => {
         // If this is a section intro, add html to this level, and
         if(isRoot || reachedTheEnd) {
             treePosition[workingSegment].html = html;
+            treePosition[workingSegment].markdown = markdown;
 
             return;
         }
@@ -58,15 +53,15 @@ module.exports = (directory = false) => {
 
     files.forEach((filePath) => {
         // Load html from markdown
-        const markdown = fs.readFileSync(filePath);
+        const markdownFileContents = fs.readFileSync(filePath);
 
-        const html = md.render(markdown.toString());
+        const html = md.render(markdownFileContents.toString());
 
         // Short path relative to their current working directory
-        const shortPath = filePath.replace(`${process.cwd()}/${directory}/`, "");
+        const shortPath = filePath.replace(`${process.cwd()}/${markdown}/`, "");
         
         // Build tree and add html to corresponding tree node
-        pathToTree(shortPath, html, markdown);
+        pathToTree(shortPath, html, markdownFileContents);
     });
     
     return tree;
